@@ -44,13 +44,40 @@ def get_asin_from_link(amz_link):
 
 
 def get_offer_id_list(asin):
+    rand = random.random() + .4
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     offer_link = 'https://www.amazon.com/gp/offer-listing/' + asin + '/'
     #chrome_options=options
     driver = webdriver.Chrome()
     driver.get(offer_link)
-    page_source = driver.page_source
+
+
+    #Detect pagination and call get_offerids_on_single_page() for each page.
+    pages = driver.find_element_by_class_name('a-pagination')
+    pages = pages.find_elements_by_css_selector('li')
+    pages = len(pages) - 2
+    total_pages = pages
+    print(pages)
+    offer_id_list = []
+    for page in range(pages):
+        time.sleep(rand)
+        print("Current Page: ")
+        print(page+1)
+        page_id = page + 1
+        start_index = (page_id * 10)-10
+        offer_listing_url = 'https://www.amazon.com/gp/offer-listing/' + asin + '/ref=olp_page_'+ str(page_id) +'?ie=UTF8&f_new=true&startIndex=' + str(start_index)
+        driver.get(offer_listing_url)
+        page_source = driver.page_source
+        single_page_offer_id_list = get_offerids_on_single_page(page_source)
+        offer_id_list.append(single_page_offer_id_list)
+        time.sleep(rand)
+        print(offer_id_list)
+
+    return [offer_id_list,total_pages]
+
+
+def get_offerids_on_single_page(page_source):
     soup = BeautifulSoup(page_source)
     offering_ids = soup.find_all('input', attrs={'name': 'offeringID.1', 'type': 'hidden'})
     offer_id_list = []
@@ -58,8 +85,7 @@ def get_offer_id_list(asin):
     for offer in offering_ids:
         offer_id = offer['value']
         offer_id_list.append(offer_id)
-        print(offer_id_list)
-    driver.close()
+        #print(offer_id_list)
     return offer_id_list
 
 def get_cart_url(offer_id_list):
@@ -175,12 +201,12 @@ def get_current_stock(cart_url):
 
 
 #asin_test = get_asin_from_link(amazon_link)
-#offer_id_list_test = get_offer_id_list(asin_test)
+offer_id_list_test = get_offer_id_list(asin)
 #cart_url_test = get_cart_url(offer_id_list_test)
-cur_stock_test = get_current_stock(cart_url)
+#cur_stock_test = get_current_stock(cart_url)
 
 #print(asin_test)
-#print(offer_id_list_test)
+print(offer_id_list_test)
 #print(cart_url_test)
-print(cur_stock_test[0])
-print(cur_stock_test[1])
+#print(cur_stock_test[0])
+#print(cur_stock_test[1])
