@@ -211,7 +211,7 @@ def get_current_stock(cart_url):
 
 
 asin_test = get_asin_from_link(amazon_link)
-offer_id_list_test = get_offer_id_list(asin_test)
+offer_id_list_test = get_offer_id_list(asin)
 cart_url_test = get_cart_url(offer_id_list_test)
 cur_stock_test = get_current_stock(cart_url_test)
 
