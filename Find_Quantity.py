@@ -113,7 +113,7 @@ def get_current_stock(cart_url):
 
 
     start_time = datetime.now()
-    
+
     rand = random.random() + .4
 
     driver.get(cart_url)
@@ -209,13 +209,13 @@ def get_current_stock(cart_url):
 
 
 
-#asin_test = get_asin_from_link(amazon_link)
-offer_id_list_test = get_offer_id_list(asin)
-#cart_url_test = get_cart_url(offer_id_list_test)
-#cur_stock_test = get_current_stock(cart_url)
+asin_test = get_asin_from_link(amazon_link)
+offer_id_list_test = get_offer_id_list(asin_test)
+cart_url_test = get_cart_url(offer_id_list_test)
+cur_stock_test = get_current_stock(cart_url_test)
 
-#print(asin_test)
+print(asin_test)
 print(offer_id_list_test)
-#print(cart_url_test)
-#print(cur_stock_test[0])
-#print(cur_stock_test[1])
+print(cart_url_test)
+print(cur_stock_test[0])
+print(cur_stock_test[1])
