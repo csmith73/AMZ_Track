@@ -38,6 +38,7 @@ def get_asin_from_link(amz_link):
             asin = asin.strip()
             print(asin)
     driver.close()
+    print(asin)
     return asin
 
 
