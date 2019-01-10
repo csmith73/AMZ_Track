@@ -57,6 +57,7 @@ def get_offer_id_list(asin):
     offer_link = 'https://www.amazon.com/gp/offer-listing/' + asin + '/'
     #chrome_options=options
     driver.get(offer_link)
+    print(offer_link)
 
 
     #Detect pagination and call get_offerids_on_single_page() for each page.
@@ -210,12 +211,12 @@ def get_current_stock(cart_url):
 
 
 
-asin_test = get_asin_from_link(amazon_link)
+#asin_test = get_asin_from_link(amazon_link)
 offer_id_list_test = get_offer_id_list(asin)
 cart_url_test = get_cart_url(offer_id_list_test)
 cur_stock_test = get_current_stock(cart_url_test)
 
-print(asin_test)
+#print(asin_test)
 print(offer_id_list_test)
 print(cart_url_test)
 print(cur_stock_test[0])
