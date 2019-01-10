@@ -16,10 +16,12 @@ cart_url = 'https://www.amazon.com/gp/aws/cart/add.html?OfferListingId.1=6RyFFTl
 
 
 def get_asin_from_link(amz_link):
-    options = webdriver.ChromeOptions()
-    options.add_argument('headless')
-
-    driver = webdriver.Chrome()
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument(
+        '--no-sandbox')  # required when running as root user. otherwise you would get no sandbox errors.
+    driver = webdriver.Chrome(executable_path='/dev/chromedriver', chrome_options=chrome_options,
+                              service_args=['--verbose', '--log-path=/tmp/chromedriver.log'])
 
     rand = random.random() + .4
     driver.get(amz_link)
@@ -45,11 +47,14 @@ def get_asin_from_link(amz_link):
 
 def get_offer_id_list(asin):
     rand = random.random() + .4
-    options = webdriver.ChromeOptions()
-    options.add_argument('headless')
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument(
+        '--no-sandbox')  # required when running as root user. otherwise you would get no sandbox errors.
+    driver = webdriver.Chrome(executable_path='/dev/chromedriver', chrome_options=chrome_options,
+                              service_args=['--verbose', '--log-path=/tmp/chromedriver.log'])
     offer_link = 'https://www.amazon.com/gp/offer-listing/' + asin + '/'
     #chrome_options=options
-    driver = webdriver.Chrome()
     driver.get(offer_link)
 
 
@@ -99,12 +104,16 @@ def get_cart_url(offer_id_list):
 
 
 def get_current_stock(cart_url):
-    options = webdriver.ChromeOptions()
-    options.add_argument('headless')
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument(
+        '--no-sandbox')  # required when running as root user. otherwise you would get no sandbox errors.
+    driver = webdriver.Chrome(executable_path='/dev/chromedriver', chrome_options=chrome_options,
+                              service_args=['--verbose', '--log-path=/tmp/chromedriver.log'])
 
 
     start_time = datetime.now()
-    driver = webdriver.Chrome()
+    
     rand = random.random() + .4
 
     driver.get(cart_url)
