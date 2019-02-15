@@ -4,39 +4,80 @@ from bs4 import BeautifulSoup
 
 
 
-soup = BeautifulSoup(open("ex_offer_listing.html"), "lxml")
-sellers = soup.findAll(True, {'class': 'olpSellerName'})
-seller_names_list = []
+soup = BeautifulSoup(open("ex_cart_2_14.html"), "lxml")
+sellers = soup.findAll(True, {'class': 'sc-product-link'})
+print(len(sellers))
 seller_id_list = []
 for seller in sellers:
-    print(seller)
-
-    img = seller.find_all('img')
-
-    if len(img) == 1:
-        seller_name = img[0]['alt']
-        print(seller_name)
-        seller_names_list.append(seller_name)
-        if seller_name == 'Amazon.com':
-            seller_id = 'Amazon.com'
-        if seller_name == 'Amazon Warehouse':
-            seller_id = 'AmazonWarehouse'
-        seller_id_list.append(seller_id)
-    else:
-        seller_name = seller.findAll('a')
-        seller_name = seller_name[0].string
-        seller_names_list.append(seller_name)
-
-        seller_id = seller.findAll('a')[0]['href']
-        seller_id = seller_id.split('seller=',1)[1]
-        seller_id = seller_id.strip()
-        seller_id_list.append(seller_id)
-        print(seller_id)
+    seller_id = seller.findAll('a')[0]['href']
+    seller_id = seller_id.split('mid=', 1)[1]
+    seller_id = seller_id.strip()
+    seller_id_list.append(seller_id)
+    print(seller_id)
 
 
-print(seller_names_list)
-seller_names_id_dict = dict(zip(seller_names_list, seller_id_list))
-print(seller_names_id_dict)
+
+
+
+print(len(seller_id_list))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# seller_names_list = []
+# seller_id_list = []
+# for seller in sellers:
+#     print(seller)
+#
+#     img = seller.find_all('img')
+#
+#     if len(img) == 1:
+#         seller_name = img[0]['alt']
+#         print(seller_name)
+#         seller_names_list.append(seller_name)
+#         if seller_name == 'Amazon.com':
+#             seller_id = 'Amazon.com'
+#         if seller_name == 'Amazon Warehouse':
+#             seller_id = 'AmazonWarehouse'
+#         seller_id_list.append(seller_id)
+#     else:
+#         seller_name = seller.findAll('a')
+#         seller_name = seller_name[0].string
+#         seller_names_list.append(seller_name)
+#
+#         seller_id = seller.findAll('a')[0]['href']
+#         seller_id = seller_id.split('seller=',1)[1]
+#         seller_id = seller_id.strip()
+#         seller_id_list.append(seller_id)
+#         print(seller_id)
+#
+#
+# print(seller_names_list)
+# seller_names_id_dict = dict(zip(seller_names_list, seller_id_list))
+# print(seller_names_id_dict)
 
 
 
