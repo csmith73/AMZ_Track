@@ -62,14 +62,14 @@ def get_asin_from_link(amz_link):
 def get_offer_id_list(asin):
     is_multiple_pages = True
     rand = random.random() + .4
-    # chrome_options = webdriver.ChromeOptions()
-    # chrome_options.add_argument('--headless')
-    # chrome_options.add_argument(
-    #     '--no-sandbox')  # required when running as root user. otherwise you would get no sandbox errors.
-    # driver = webdriver.Chrome(executable_path='/dev/chromedriver', chrome_options=chrome_options,
-    #                           service_args=['--verbose', '--log-path=/tmp/chromedriver.log'])
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument(
+         '--no-sandbox')  # required when running as root user. otherwise you would get no sandbox errors.
+    driver = webdriver.Chrome(executable_path='/dev/chromedriver', chrome_options=chrome_options,
+                               service_args=['--verbose', '--log-path=/tmp/chromedriver.log'])
 
-    driver = webdriver.Chrome()
+    #driver = webdriver.Chrome()
     offer_link = 'https://www.amazon.com/gp/offer-listing/' + asin + '/'
     #chrome_options=options
     driver.get(offer_link)
@@ -119,7 +119,7 @@ def get_offer_id_list(asin):
         offer_id_list = offer_id_list + single_page_offer_id_list
         time.sleep(rand)
         print(offer_id_list)
-
+    driver.close()
     return [offer_id_list,total_pages,seller_name_id_dict,asin]
 
 
@@ -188,7 +188,13 @@ def scan_cart(asin,seller_names_id, cart_url):
     seller_names_id = inv_map = {v: k for k, v in seller_names_id.items()}
     print(seller_names_id)
     print('........................................................................................')
-    driver = webdriver.Chrome()
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument(
+         '--no-sandbox')  # required when running as root user. otherwise you would get no sandbox errors.
+    driver = webdriver.Chrome(executable_path='/dev/chromedriver', chrome_options=chrome_options,
+                               service_args=['--verbose', '--log-path=/tmp/chromedriver.log'])
+    #driver = webdriver.Chrome()
     start_time = datetime.now()
 
     rand = random.random() + .4
@@ -198,11 +204,11 @@ def scan_cart(asin,seller_names_id, cart_url):
     driver.find_element_by_name('add').click()
     time.sleep(rand)
 
-    # for back_count in list(range(0,2)):
-    #     driver.execute_script("window.history.go(-1)")
-    #     time.sleep(rand)
-    #     driver.find_element_by_name('add').click()
-    #     time.sleep(rand)
+    for back_count in list(range(0,2)):
+         driver.execute_script("window.history.go(-1)")
+         time.sleep(rand)
+         driver.find_element_by_name('add').click()
+         time.sleep(rand)
 
 
 
@@ -223,13 +229,13 @@ def scan_cart(asin,seller_names_id, cart_url):
     print(len(sellers))
     seller_id_list = []
     for seller in sellers:
-        print(seller)
+        #print(seller)
         seller_id = seller.findAll('a')[0]['href']
         seller_id = seller_id.split('mid=', 1)[1]
         seller_id = seller_id.split('&', 1)[0]
         seller_id = seller_id.strip()
         seller_id_list.append(seller_id)
-        print(seller_id)
+        #print(seller_id)
 
 
     print(len(seller_names_id))
@@ -251,15 +257,11 @@ def scan_cart(asin,seller_names_id, cart_url):
         print('Seller Name:')
         print(seller.encode('ascii','ignore'))
         seller = seller.encode('ascii','ignore')
-
-        x.execute("INSERT INTO productinventory (asin,seller,date,inventory) VALUES (%s,%s,%s,%s)",
-              (asin, seller, date, inventory))
+        x.execute("INSERT INTO productinventory (asin,seller,date,inventory) VALUES (%s,%s,%s,%s)",(asin, seller, date, inventory))
         conn.commit()
 
-    conn.close()
-
-
-
+    #conn.close()
+    driver.close()
     print(data_offering_qty_dict)
 
 def get_current_stock(cart_url):
@@ -409,25 +411,26 @@ def get_current_stock(cart_url):
     #driver.close()
     return data_offering_qty_dict
 
-asin_state = 'B00MV017AO'
+asin_state = ['B007D3V00Q','B07BM9LHRB','B00MV017AO','B01FIML2KQ',]
+#asin_state = ['B01FIML2KQ']
 seller_names_id_list_state = {'Amazon Warehouse': 'A2L77EE7U53NWQ', 'DI ORO': 'A8ZXRV4PB0V5P', 'GetShredded': 'A36UDZCMGW1FH9'}
 cart_url_state = 'https://www.amazon.com/gp/aws/cart/add.html?OfferListingId.1=5BpQx7NU41Cs2FjDms%252B8cIH9ZYCZNEgOI6O8%252BI4f4XKMBv8xXCubgyD3qiAd4oXQHKngpQh%252FtIv0cf%252B5nmfG2v7OCjDPnPXOvJ46vEETdz1M9lsGNO7Q0gmS1yqNfsmsbbap%252Fm6FnGBeWFUub7xU1MGpWsd9s5%252Bq&Quantity.1=10&OfferListingId.2=cyX223n31C%252BbkTIUDhPpJ6uNvwrIkq7stAPnofAKYaq1FiDiDJGIaggNecy9vBP9YnDiKluFb2IALIDR95%252BBqmgMQuWEg9%252B85O31%252FiLGg7BYBHG5d9jJkS%252Fsu31JSNCJuwteCBpBdXODT3F5CZIcDLw4P0WbarUA&Quantity.2=10&OfferListingId.3=aAezmqnLz8IyO%252B5ZK9uQUozy%252BNsyD1z150Z744bSFYopKz%252BcyYgnRrdnvhhpK%252FCTrTs13oa2OG40v%252FrSKi8UCbCdJ4p7bUO2GxdPI5GzIPyISfq02AIQmuGCWK49BdDziClGZam1AgY%252BTjnz6eedmyrgTiOyRLd8&Quantity.3=10&SessionId=135-5321892-6026264&confirmPage=confirm&add.x=47&add.y=11'
 
-#asin_test = get_asin_from_link(amazon_link)
-offer_id_list_test = get_offer_id_list(asin_state)
-cart_url_test = get_cart_url(offer_id_list_test[0])
-print('Offeridlist 3....................................................')
-print(offer_id_list_test[3])
-print('Offeridlist 2....................................................')
-print(offer_id_list_test[2])
-iventory_test = scan_cart(offer_id_list_test[3],offer_id_list_test[2],cart_url_test)
-#iventory_test = scan_cart(asin_state,seller_names_id_list_state,cart_url_state)
-#cur_stock_test = get_current_stock(one_page_cart_url)
+for cur_asin in asin_state:
+    offer_id_list_test = get_offer_id_list(cur_asin)
+    cart_url_test = get_cart_url(offer_id_list_test[0])
+    print('Offeridlist 3....................................................')
+    print(offer_id_list_test[3])
+    print('Offeridlist 2....................................................')
+    print(offer_id_list_test[2])
+    iventory_test = scan_cart(offer_id_list_test[3],offer_id_list_test[2],cart_url_test)
+    #iventory_test = scan_cart(asin_state,seller_names_id_list_state,cart_url_state)
+    #cur_stock_test = get_current_stock(one_page_cart_url)
 
-#print('Final ASIN')
-#print(asin_test)
-#print('Final offer_id_list_test')
-#print(offer_id_list_test)
+    #print('Final ASIN')
+    #print(asin_test)
+    #print('Final offer_id_list_test')
+    #print(offer_id_list_test)
 
 
-print(iventory_test)
+    print(iventory_test)
