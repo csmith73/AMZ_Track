@@ -74,6 +74,7 @@ def get_offer_id_list(asin):
     #chrome_options=options
     driver.get(offer_link)
     print(offer_link)
+    print(driver.page_source)
 
 
     #Detect pagination and call get_offerids_on_single_page() for each page.
