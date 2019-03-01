@@ -411,8 +411,8 @@ def get_current_stock(cart_url):
     #driver.close()
     return data_offering_qty_dict
 
-asin_state = ['B007D3V00Q','B07BM9LHRB','B00MV017AO','B01FIML2KQ',]
-#asin_state = ['B01FIML2KQ']
+#asin_state = ['B007D3V00Q','B07BM9LHRB','B00MV017AO','B01FIML2KQ',]
+asin_state = ['B01FIML2KQ']
 seller_names_id_list_state = {'Amazon Warehouse': 'A2L77EE7U53NWQ', 'DI ORO': 'A8ZXRV4PB0V5P', 'GetShredded': 'A36UDZCMGW1FH9'}
 cart_url_state = 'https://www.amazon.com/gp/aws/cart/add.html?OfferListingId.1=5BpQx7NU41Cs2FjDms%252B8cIH9ZYCZNEgOI6O8%252BI4f4XKMBv8xXCubgyD3qiAd4oXQHKngpQh%252FtIv0cf%252B5nmfG2v7OCjDPnPXOvJ46vEETdz1M9lsGNO7Q0gmS1yqNfsmsbbap%252Fm6FnGBeWFUub7xU1MGpWsd9s5%252Bq&Quantity.1=10&OfferListingId.2=cyX223n31C%252BbkTIUDhPpJ6uNvwrIkq7stAPnofAKYaq1FiDiDJGIaggNecy9vBP9YnDiKluFb2IALIDR95%252BBqmgMQuWEg9%252B85O31%252FiLGg7BYBHG5d9jJkS%252Fsu31JSNCJuwteCBpBdXODT3F5CZIcDLw4P0WbarUA&Quantity.2=10&OfferListingId.3=aAezmqnLz8IyO%252B5ZK9uQUozy%252BNsyD1z150Z744bSFYopKz%252BcyYgnRrdnvhhpK%252FCTrTs13oa2OG40v%252FrSKi8UCbCdJ4p7bUO2GxdPI5GzIPyISfq02AIQmuGCWK49BdDziClGZam1AgY%252BTjnz6eedmyrgTiOyRLd8&Quantity.3=10&SessionId=135-5321892-6026264&confirmPage=confirm&add.x=47&add.y=11'
 
@@ -434,3 +434,6 @@ for cur_asin in asin_state:
 
 
     print(iventory_test)
+
+print('Server Stopped.........................')
+server.stop();
